@@ -1,7 +1,8 @@
 import Constants from "expo-constants";
+import type { Incident } from "../types/Incident";
 
-export async function fetchIncidents() {
-  const API_KEY = Constants.expoConfig.extra.EXPO_PUBLIC_API_KEY;
+export async function fetchIncidents(): Promise<Incident[]> {
+  const API_KEY = (Constants.expoConfig as any).extra.EXPO_PUBLIC_API_KEY;
 
   const res = await fetch(
     "https://api.transport.nsw.gov.au/v1/live/hazards/incident/all",
@@ -10,7 +11,7 @@ export async function fetchIncidents() {
         Accept: "application/json",
         Authorization: API_KEY,
       },
-    }
+    },
   );
 
   const data = await res.json();
@@ -32,6 +33,7 @@ export async function fetchIncidents() {
       mainCategory: p.mainCategory ?? "",
       region: r.region ?? "",
       mainStreet: r.mainStreet ?? "",
+      crossStreet: r.crossStreet ?? "",
       created: p.created,
       adviceA: p.adviceA ?? "",
     };

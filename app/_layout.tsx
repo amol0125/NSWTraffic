@@ -14,13 +14,9 @@ export default function RootLayout() {
   return (
     <>
       <Stack>
-        <Stack.Screen name="index" options={{ title: 'Home' }} />
-        <Stack.Screen name="(incident)" options={{ headerShown: false }} />
-        <Stack.Screen name="my-incidents" options={{ title: 'My Incidents' }} />
-        <Stack.Screen name="(components)" options={{ headerShown: false }} />
-        <Stack.Screen name="(servicess)" options={{ headerShown: false }} />
-        <Stack.Screen name="(storage)" options={{ headerShown: false }} />
-        <Stack.Screen name="(utils)" options={{ headerShown: false }} />
+        <Stack.Screen name="index" options={{ headerShown: false }} /> 
+        <Stack.Screen name="saved" options={{ headerShown: false }} />   
+        <Stack.Screen name="results" options={{ headerShown: false }} />
       </Stack>
       <StatusBar style="auto" />
     </>

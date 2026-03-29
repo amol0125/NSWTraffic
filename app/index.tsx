@@ -1,79 +1,117 @@
-import { useEffect, useState } from "react";
-import { View, Text, FlatList, StyleSheet } from "react-native";
 import { Picker } from "@react-native-picker/picker";
-import { fetchIncidents } from "./(services)/trafficApi";
+import { router } from "expo-router";
+import { useEffect, useState } from "react";
+import {
+  Alert,
+  Button,
+  FlatList,
+  Pressable,
+  StyleSheet,
+  Text,
+  TextInput,
+  View
+} from "react-native";
 
-import { Button } from "react-native";
+import { fetchIncidents } from "../src/services/trafficApi";
+import type { Incident } from "../src/types/Incident";
+import { SafeAreaView } from "react-native-safe-area-context";
+
 
 
 export default function Home() {
-  const [rawIncidents, setRawIncidents] = useState([]);
 
   const [regions, setRegions] = useState<string[]>([]);
   const [types, setTypes] = useState<string[]>([]);
   const [streets, setStreets] = useState<string[]>([]);
-
   const [selectedRegion, setSelectedRegion] = useState("");
   const [selectedType, setSelectedType] = useState("");
   const [selectedStreet, setSelectedStreet] = useState("");
 
-  const [allIncidents, setAllIncidents] = useState([]);
-  
+  const [filteredStreets, setFilteredStreets] = useState<string[]>([]);
+  const [allIncidents, setAllIncidents] = useState<Incident[]>([]);
+  const [rawIncidents, setRawIncidents] = useState<Incident[]>([]);
 
 
-const handleSearch = () => {
-  let filtered = allIncidents; // ALWAYS start from full list
-
-  if (selectedRegion) {
-    filtered = filtered.filter(i => i.region === selectedRegion);
-  }
-
-  if (selectedType) {
-    filtered = filtered.filter(i => i.mainCategory === selectedType);
-  }
-
-  if (selectedStreet) {
-    filtered = filtered.filter(i => i.mainStreet === selectedStreet);
-  }
-
-  setRawIncidents(filtered);
-};
 
 
+
+  const handleSearch = () => {
+    let filtered = allIncidents;
+
+    // LAST 3 MONTHS FILTER
+    const now = new Date();
+    const threeMonthsAgo = new Date();
+    threeMonthsAgo.setMonth(now.getMonth() - 3);
+
+    filtered = filtered.filter(i => {
+      const createdDate = new Date(i.created);
+      return createdDate >= threeMonthsAgo && createdDate <= now;
+    });
+
+    // REGION FILTER
+    if (selectedRegion) {
+      filtered = filtered.filter(i => i.region === selectedRegion);
+    }
+
+    // TYPE FILTER
+    if (selectedType) {
+      filtered = filtered.filter(i => i.mainCategory === selectedType);
+    }
+
+    // STREET FILTER
+    if (selectedStreet) {
+      filtered = filtered.filter(i => i.mainStreet === selectedStreet);
+    }
+
+    // SHOW MESSAGE IF NO RESULTS
+    if (filtered.length === 0) {
+      Alert.alert(
+        "No Incidents Found",
+        "No incidents were found in the last 3 months for your selected filters."
+      );
+      return;
+    }
+
+    // NAVIGATE TO RESULTS PAGE
+    router.push({
+      pathname: "/results",
+      params: { data: JSON.stringify(filtered) },
+    });
+  };
 
 
   useEffect(() => {
     loadData();
   }, []);
 
-const loadData = async () => {
-  const list = await fetchIncidents();
+  const loadData = async () => {
+    const list = await fetchIncidents();
 
-  setAllIncidents(list);
-  setRawIncidents(list);
+    setAllIncidents(list);
+    setRawIncidents(list);
 
-  // Extract regions from FULL list
-  const regionSet = new Set(
-    list.map(i => i.region).filter(r => r && r.trim() !== "")
-  );
-  setRegions([...regionSet]);
+    // Extract regions from FULL list
+    const regionSet = new Set(
+      list.map(i => i.region).filter(r => r && r.trim() !== "")
+    );
+    setRegions([...regionSet]);
 
-  // Extract types from FULL list
-  const typeSet = new Set(
-    list.map(i => i.mainCategory).filter(t => t && t.trim() !== "")
-  );
-  setTypes([...typeSet]);
+    // Extract types from FULL list
+    const typeSet = new Set(
+      list.map(i => i.mainCategory).filter(t => t && t.trim() !== "")
+    );
+    setTypes([...typeSet]);
 
-  // Extract streets from FULL list
-  const streetSet = new Set(
-    list.map(i => i.mainStreet).filter(s => s && s.trim() !== "")
-  );
-  setStreets([...streetSet]);
-};
+    // Extract streets from FULL list
+    const streetSet = new Set(
+      list.map(i => i.mainStreet).filter(s => s && s.trim() !== "")
+    );
+    setStreets([...streetSet]);
+  };
 
 
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container} edges={['top', 'left', 'right']}>
       <Text style={styles.title}>NSW Traffic Incidents</Text>
 
       {/* REGION PICKER */}
@@ -89,7 +127,7 @@ const loadData = async () => {
         ))}
       </Picker>
 
-      {/* TYPE PICKER */}
+      {/* TYPE STREET */}
       <Text style={styles.label}>Incident Type</Text>
       <Picker
         selectedValue={selectedType}
@@ -104,34 +142,54 @@ const loadData = async () => {
 
       {/* STREET PICKER */}
       <Text style={styles.label}>Street</Text>
-      <Picker
-        selectedValue={selectedStreet}
-        onValueChange={setSelectedStreet}
-        style={styles.picker}
-      >
-        <Picker.Item label="All Streets" value="" />
-        {streets.map((s, index) => (
-          <Picker.Item key={s || index} label={s} value={s} />
-        ))}
-      </Picker>
+      <TextInput
+        placeholder="Enter street name"
+        value={selectedStreet}
+        onChangeText={(text) => {
+          setSelectedStreet(text);
+
+          if (text.length > 0) {
+            const matches = streets.filter((s) =>
+              s.toLowerCase().includes(text.toLowerCase())
+            );
+            setFilteredStreets(matches);
+          } else {
+            setFilteredStreets([]);
+          }
+        }}
+        style={styles.input}
+      />
+
+      {filteredStreets.length > 0 && (
+        <View style={styles.suggestionBox}>
+          {filteredStreets.map((s, index) => (
+            <Pressable
+              key={index}
+              onPress={() => {
+                setSelectedStreet(s);
+                setFilteredStreets([]);
+              }}
+              style={styles.suggestionItem}
+            >
+              <Text>{s}</Text>
+            </Pressable>
+          ))}
+        </View>
+      )}
 
       {/* INCIDENT LIST */}
+      <Pressable
+        onPress={() => router.push("/saved")}
+        style={styles.savedButton}
+      >
+        <Text style={styles.savedButtonText}>Saved Incidents</Text>
+      </Pressable>
+
       <Button title="Search" onPress={handleSearch} />
       
 
-      <FlatList
-        data={rawIncidents}
-        keyExtractor={(item) => String(item.id)}
-        renderItem={({ item }) => (
-          <View style={styles.card}>
-            <Text style={styles.cardTitle}>{item.mainCategory}</Text>
-            <Text>{item.mainStreet}</Text>
-            <Text>{item.region}</Text>
-            <Text>{new Date(item.created).toLocaleString()}</Text>
-          </View>
-        )}
-      />
-    </View>
+
+    </SafeAreaView>
   );
 }
 
@@ -147,4 +205,39 @@ const styles = StyleSheet.create({
     marginVertical: 6,
   },
   cardTitle: { fontWeight: "bold" },
+
+  savedButton: {
+    marginBottom: 15,
+    paddingVertical: 10,
+    backgroundColor: "#34C759",
+    borderRadius: 6,
+    alignItems: "center",
+  },
+  savedButtonText: {
+    color: "white",
+    fontWeight: "600",
+    fontSize: 16,
+  },
+
+  input: {
+    borderWidth: 1,
+    borderColor: "#ccc",
+    borderRadius: 6,
+    padding: 10,
+    marginBottom: 10,
+  },
+  suggestionBox: {
+    borderWidth: 1,
+    borderColor: "#ccc",
+    borderRadius: 6,
+    backgroundColor: "white",
+    maxHeight: 150,
+    marginBottom: 10,
+  },
+  suggestionItem: {
+    padding: 10,
+    borderBottomWidth: 1,
+    borderBottomColor: "#eee",
+  },
+
 });
