@@ -5,7 +5,9 @@ import { clearAllIncidents, getSavedIncidents, removeIncident } from "../src/sto
 import type { Incident } from "../src/types/Incident";
 import { SafeAreaView } from "react-native-safe-area-context";
 
-
+export const unstable_settings = {
+  prerender: false,
+};
 
 
 export default function SavedIncidents() {

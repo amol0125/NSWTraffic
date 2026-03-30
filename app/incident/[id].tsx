@@ -5,6 +5,10 @@ import { useEffect, useState } from "react";
 import { fetchIncidents } from "../../src/services/trafficApi";
 import type { Incident } from "../../src/types/Incident";
 
+export const unstable_settings = {
+  prerender: false,
+};
+
 
 export default function IncidentDetails() {
   const { id } = useLocalSearchParams();
