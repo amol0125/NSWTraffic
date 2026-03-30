@@ -24,7 +24,7 @@ jobs:
         run: npm test -- --watchAll=false
 
       - name: Build Expo Web
-        run: npx expo export:web
+        run: npx expo export --platform web --output-dir dist
 
       - name: Upload production-ready web build
         uses: actions/upload-pages-artifact@v3
