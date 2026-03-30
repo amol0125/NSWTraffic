@@ -9,7 +9,7 @@ export async function fetchIncidents(): Promise<Incident[]> {
     {
       headers: {
         Accept: "application/json",
-        Authorization: `apikey ${API_KEY}`,
+        Authorization: API_KEY,
       },
     },
   );
