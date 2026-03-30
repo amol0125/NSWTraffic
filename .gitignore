@@ -43,5 +43,5 @@ app-example
 /android
 
 # secure apikey
-.env
+#.env
 
