@@ -9,7 +9,7 @@ export default {
   },
 
   extra: {
-    API_KEY: process.env.API_KEY,
+    API_KEY: process.env.EXPO_PUBLIC_NSW_API_KEY,
     router: {
       origin: "https://amol0125.github.io/NSWTraffic"
     }
@@ -50,6 +50,7 @@ export default {
 
   experiments: {
     typedRoutes: true,
-    reactCompiler: true
+    reactCompiler: true,
+    baseUrl: "/NSWTraffic"   // ← REQUIRED FOR GITHUB PAGES
   }
 };
