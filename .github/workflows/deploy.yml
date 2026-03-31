@@ -22,6 +22,8 @@ jobs:
       - run: npm test -- --watchAll=false
 
       #- run: npx expo export --platform web --output-dir dist
+      - run: npx expo export --platform web --output-dir dist --base-url /NSWTraffic
+
 
       - uses: actions/upload-pages-artifact@v3
         with:

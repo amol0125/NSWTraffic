@@ -23,7 +23,7 @@
     },
     "web": {
       "output": "static",
-      "baseUrl": "/NSWTraffic",
+      "baseUrl": "/NSWTraffic/",
       "favicon": "./assets/images/favicon.png"
     },
     "plugins": [
