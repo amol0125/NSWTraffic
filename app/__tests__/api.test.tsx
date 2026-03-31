@@ -65,7 +65,8 @@ describe("fetchIncidents", () => {
     await fetchIncidents();
 
     expect(fetch).toHaveBeenCalledWith(
-      "https://amol0125s-projects.vercel.app/api/incidents"
+      "https://nsw-traffic.vercel.app/api/incidents"
     );
+
   });
 });
