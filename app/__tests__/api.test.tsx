@@ -1,14 +1,5 @@
 import { fetchIncidents } from "../../src/services/trafficApi";
 
-// Mock expo-constants
-jest.mock("expo-constants", () => ({
-  expoConfig: {
-    extra: {
-      EXPO_PUBLIC_API_KEY: "TEST_KEY",
-    },
-  },
-}));
-
 // Mock global fetch
 global.fetch = jest.fn();
 
@@ -66,7 +57,7 @@ describe("fetchIncidents", () => {
     expect(result).toEqual([]);
   });
 
-  it("calls fetch with correct URL and headers", async () => {
+  it("calls the Vercel proxy instead of NSW API", async () => {
     (fetch as jest.Mock).mockResolvedValueOnce({
       json: () => Promise.resolve({ features: [] }),
     });
@@ -74,13 +65,7 @@ describe("fetchIncidents", () => {
     await fetchIncidents();
 
     expect(fetch).toHaveBeenCalledWith(
-      "https://api.transport.nsw.gov.au/v1/live/hazards/incident/all",
-      expect.objectContaining({
-        headers: expect.objectContaining({
-          Accept: "application/json",
-          Authorization: `apikey TEST_KEY`,
-        }),
-      })
+      "https://amol0125s-projects.vercel.app/api/incidents"
     );
   });
 });
