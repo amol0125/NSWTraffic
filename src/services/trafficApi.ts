@@ -1,14 +1,25 @@
 import type { Incident } from "../types/Incident";
 
 export async function fetchIncidents(): Promise<Incident[]> {
-  const res = await fetch("https://nsw-traffic.vercel.app/");
+  const res = await fetch(
+    "https://api.transport.nsw.gov.au/v1/live/hazards/incident/all",
+    {
+      method: "GET",
+      headers: {
+        Accept: "application/json",
+        Authorization: process.env.EXPO_PUBLIC_NSW_API_KEY!,
+      },
+    }
+  );
+
+  if (!res.ok) {
+    console.log("NSW API error:", res.status, await res.text());
+    return [];
+  }
 
   const data = await res.json();
 
-  if (!data || !data.features) {
-    console.log("Unexpected API response:", data);
-    return [];
-  }
+  if (!data || !data.features) return [];
 
   return data.features.map((f: any) => {
     const p = f.properties;

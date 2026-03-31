@@ -10,6 +10,7 @@ describe("fetchIncidents", () => {
 
   it("returns mapped incidents when API responds correctly", async () => {
     (fetch as jest.Mock).mockResolvedValueOnce({
+      ok: true,
       json: () =>
         Promise.resolve({
           features: [
@@ -50,6 +51,7 @@ describe("fetchIncidents", () => {
 
   it("returns empty array when API returns no features", async () => {
     (fetch as jest.Mock).mockResolvedValueOnce({
+      ok: true,
       json: () => Promise.resolve({}),
     });
 
@@ -57,16 +59,22 @@ describe("fetchIncidents", () => {
     expect(result).toEqual([]);
   });
 
-  it("calls the Vercel proxy instead of NSW API", async () => {
+  it("calls the NSW API with correct headers", async () => {
     (fetch as jest.Mock).mockResolvedValueOnce({
+      ok: true,
       json: () => Promise.resolve({ features: [] }),
     });
 
     await fetchIncidents();
 
     expect(fetch).toHaveBeenCalledWith(
-      "https://nsw-traffic.vercel.app/"
+      "https://api.transport.nsw.gov.au/v1/traffic/hazards",
+      expect.objectContaining({
+        headers: expect.objectContaining({
+          Accept: "application/json",
+          Authorization: expect.stringContaining("apikey "),
+        }),
+      })
     );
-
   });
 });

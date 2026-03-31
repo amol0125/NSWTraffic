@@ -43,8 +43,4 @@ app-example
 /android
 
 # secure apikey
-#.env
-
-
-.vercel
-.env*.local
+.env
