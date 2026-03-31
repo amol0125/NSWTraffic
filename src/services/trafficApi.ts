@@ -1,28 +1,15 @@
-import Constants from "expo-constants";
 import type { Incident } from "../types/Incident";
 
 export async function fetchIncidents(): Promise<Incident[]> {
-  const API_KEY = (Constants.expoConfig as any).extra.EXPO_PUBLIC_API_KEY;
-
-  const res = await fetch(
-    "https://amol0125s-projects.vercel.app/api/incidents",
-    {
-      headers: {
-        Accept: "application/json",
-        Authorization: API_KEY,
-      },
-    },
-  );
+  const res = await fetch("https://amol0125s-projects.vercel.app/api/incidents");
 
   const data = await res.json();
 
-  // Safety check
   if (!data || !data.features) {
     console.log("Unexpected API response:", data);
     return [];
   }
 
-  // Convert NSW API → clean incident objects
   return data.features.map((f: any) => {
     const p = f.properties;
     const r = p.roads?.[0] ?? {};
