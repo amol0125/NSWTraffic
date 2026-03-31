@@ -59,7 +59,7 @@ describe("fetchIncidents", () => {
     expect(result).toEqual([]);
   });
 
-  it("calls the NSW API with correct headers", async () => {
+  it("calls the NSW API with correct URL and headers", async () => {
     (fetch as jest.Mock).mockResolvedValueOnce({
       ok: true,
       json: () => Promise.resolve({ features: [] }),
@@ -68,11 +68,13 @@ describe("fetchIncidents", () => {
     await fetchIncidents();
 
     expect(fetch).toHaveBeenCalledWith(
-      "https://api.transport.nsw.gov.au/v1/traffic/hazards",
+      expect.stringContaining(
+        "https://api.transport.nsw.gov.au/v1/live/hazards/incident/all?apikey="
+      ),
       expect.objectContaining({
+        method: "GET",
         headers: expect.objectContaining({
           Accept: "application/json",
-          Authorization: expect.stringContaining("apikey "),
         }),
       })
     );
