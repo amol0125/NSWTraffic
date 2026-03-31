@@ -1,19 +1,10 @@
 import type { Incident } from "../types/Incident";
 
 export async function fetchIncidents(): Promise<Incident[]> {
-  const res = await fetch(
-    "https://nsw-traffic.vercel.app/api/incidents",
-    {
-      method: "GET",
-      headers: {
-        Accept: "application/json",
-        Authorization: process.env.EXPO_PUBLIC_NSW_API_KEY!,
-      },
-    }
-  );
+  const res = await fetch("https://nsw-traffic.vercel.app/api/incidents");
 
   if (!res.ok) {
-    console.log("NSW API error:", res.status, await res.text());
+    console.log("Proxy error:", res.status, await res.text());
     return [];
   }
 
