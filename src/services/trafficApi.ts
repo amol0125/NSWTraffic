@@ -5,7 +5,7 @@ export async function fetchIncidents(): Promise<Incident[]> {
   const API_KEY = (Constants.expoConfig as any).extra.EXPO_PUBLIC_API_KEY;
 
   const res = await fetch(
-    "https://api.transport.nsw.gov.au/v1/live/hazards/incident/all",
+    "https://amol0125s-projects.vercel.app/api/incidents",
     {
       headers: {
         Accept: "application/json",
