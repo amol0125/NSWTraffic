@@ -2,7 +2,7 @@ import type { Incident } from "../types/Incident";
 
 export async function fetchIncidents(): Promise<Incident[]> {
   const res = await fetch(
-    "https://nsw-traffic.vercel.app/api/incidents",
+    "https://api.transport.nsw.gov.au/v1/live/hazards/incident/all",
     {
       method: "GET",
       headers: {

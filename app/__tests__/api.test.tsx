@@ -68,7 +68,7 @@ describe("fetchIncidents", () => {
     await fetchIncidents();
 
     expect(fetch).toHaveBeenCalledWith(
-      "https://nsw-traffic.vercel.app/api/incidents",
+      "https://api.transport.nsw.gov.au/v1/live/hazards/incident/all",
       expect.objectContaining({
         method: "GET",
         headers: expect.objectContaining({
