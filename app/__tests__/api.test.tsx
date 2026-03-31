@@ -59,7 +59,7 @@ describe("fetchIncidents", () => {
     expect(result).toEqual([]);
   });
 
-  it("calls the NSW API with correct URL and headers", async () => {
+  it("calls the proxy API with correct URL", async () => {
     (fetch as jest.Mock).mockResolvedValueOnce({
       ok: true,
       json: () => Promise.resolve({ features: [] }),
@@ -68,14 +68,7 @@ describe("fetchIncidents", () => {
     await fetchIncidents();
 
     expect(fetch).toHaveBeenCalledWith(
-      "https://nsw-traffic.vercel.app/api/incidents",
-      expect.objectContaining({
-        method: "GET",
-        headers: expect.objectContaining({
-          Accept: "application/json",
-          Authorization: expect.stringContaining("apikey "),
-        }),
-      })
+      "https://nsw-traffic.vercel.app/api/incidents"
     );
   });
 });
