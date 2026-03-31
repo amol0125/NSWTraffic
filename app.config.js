@@ -7,7 +7,7 @@ export default {
 
     // 👇 Add your web config here
     web: {
-      output: "server",
+      output: "static",
       baseUrl: "/NSWTraffic",
       favicon: "./assets/images/favicon.png"
     },
