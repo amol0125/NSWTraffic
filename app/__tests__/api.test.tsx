@@ -78,7 +78,7 @@ describe("fetchIncidents", () => {
       expect.objectContaining({
         headers: expect.objectContaining({
           Accept: "application/json",
-          Authorization: `apikey TEST_KEY`,
+          Authorization: `TEST_KEY`,
         }),
       })
     );
