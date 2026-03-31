@@ -7,7 +7,7 @@ export default async function handler(req, res) {
       {
         headers: {
           Accept: "application/json",
-          Authorization: `apikey ${API_KEY}`,
+          Authorization: API_KEY,
         },
       }
     );
