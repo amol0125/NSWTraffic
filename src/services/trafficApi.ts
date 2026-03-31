@@ -1,7 +1,7 @@
 import type { Incident } from "../types/Incident";
 
 export async function fetchIncidents(): Promise<Incident[]> {
-  const res = await fetch("https://amol0125s-projects.vercel.app/api/incidents");
+  const res = await fetch("https://nsw-traffic.vercel.app/");
 
   const data = await res.json();
 
