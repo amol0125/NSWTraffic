@@ -80,6 +80,9 @@ export default function Home() {
       pathname: "/results",
       params: { data: JSON.stringify(filtered) },
     });
+
+    console.log("API KEY:", API_KEY);
+
   };
 
 

@@ -45,3 +45,6 @@ app-example
 # secure apikey
 #.env
 
+
+.vercel
+.env*.local
