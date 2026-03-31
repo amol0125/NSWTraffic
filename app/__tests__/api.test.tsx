@@ -80,7 +80,7 @@ describe("fetchIncidents", () => {
           Accept: "application/json",
           Authorization: `apikey TEST_KEY`,
         }),
-      }),
+      })
     );
   });
 });
