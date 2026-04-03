@@ -21,8 +21,11 @@ jobs:
 
       - run: npm test -- --watchAll=false
 
-      #- run: npx expo export --platform web --output-dir dist
       - run: npx expo export --platform web --output-dir dist
+
+      # ⭐ ADD THIS STEP ⭐
+      - name: Create 404.html for SPA routing
+        run: cp dist/index.html dist/404.html
 
       - uses: actions/upload-pages-artifact@v3
         with:
