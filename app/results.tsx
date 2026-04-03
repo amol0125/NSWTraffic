@@ -100,7 +100,7 @@ export default function ResultsPage() {
                     const updated = await getSavedIncidents();
                     setSavedList(updated);
                     if (Platform.OS === "web") {
-                        window.alert("Saved" + "Incident has been added to My Incidents.");
+                        window.alert("Saved" + "\nIncident has been added to My Incidents.");
                     } else {
                     Alert.alert("Saved", "Incident has been added to My Incidents.");
                     }}}
