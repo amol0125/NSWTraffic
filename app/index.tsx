@@ -15,6 +15,7 @@ import {
 import { fetchIncidents } from "../src/services/trafficApi";
 import type { Incident } from "../src/types/Incident";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { Platform } from "react-native";
 
 export const unstable_settings = {
   prerender: false,
@@ -68,12 +69,17 @@ export default function Home() {
 
     // SHOW MESSAGE IF NO RESULTS
     if (filtered.length === 0) {
-      Alert.alert(
-        "No Incidents Found",
-        "No incidents were found in the last 3 months for your selected filters."
-      );
+      if (Platform.OS === "web") {
+        window.alert("No incidents were found in the last 3 months for your selected filters.");
+      } else {
+        Alert.alert(
+          "No Incidents Found",
+          "No incidents were found in the last 3 months for your selected filters."
+        );
+      }
       return;
     }
+
 
     // NAVIGATE TO RESULTS PAGE
     router.push({

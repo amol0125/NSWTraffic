@@ -13,6 +13,7 @@ import { getSavedIncidents, saveIncident } from "../src/storage/savedIncidents";
 
 import type { Incident } from "../src/types/Incident";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { Platform } from "react-native";
 
 export const unstable_settings = {
   prerender: false,
@@ -98,8 +99,11 @@ export default function ResultsPage() {
                     await saveIncident(item);
                     const updated = await getSavedIncidents();
                     setSavedList(updated);
+                    if (Platform.OS === "web") {
+                        window.alert("Saved" + "Incident has been added to My Incidents.");
+                    } else {
                     Alert.alert("Saved", "Incident has been added to My Incidents.");
-                    }}
+                    }}}
                     style={styles.saveButton}
                 >
                     <Text style={styles.saveButtonText}>Save</Text>

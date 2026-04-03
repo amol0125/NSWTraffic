@@ -4,6 +4,7 @@ import { clearAllIncidents, getSavedIncidents, removeIncident } from "../src/sto
 
 import type { Incident } from "../src/types/Incident";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { Platform } from "react-native";
 
 export const unstable_settings = {
   prerender: false,
@@ -28,6 +29,23 @@ export default function SavedIncidents() {
   };
 
   const handleClearAll = () => {
+    if (Platform.OS === "web") {
+        window.alert(
+          "Clear All"+
+          "Are you sure you want to remove all saved incidents?"+
+          [
+            { text: "Cancel", style: "cancel" },
+            {
+              text: "Clear",
+              style: "destructive",
+              onPress: async () => {
+                await clearAllIncidents();
+                load();
+              },
+            },
+          ]
+        );
+    } else {
     Alert.alert(
       "Clear All",
       "Are you sure you want to remove all saved incidents?",
@@ -43,7 +61,7 @@ export default function SavedIncidents() {
         },
       ]
     );
-  };
+  }};
 
   return (
     <SafeAreaView style={styles.container} edges={['top', 'left', 'right']}>
