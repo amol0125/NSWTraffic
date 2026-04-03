@@ -68,13 +68,12 @@ describe("fetchIncidents", () => {
     await fetchIncidents();
 
     expect(fetch).toHaveBeenCalledWith(
-      expect.stringContaining(
-        "https://api.transport.nsw.gov.au/v1/live/hazards/incident/all?apikey="
-      ),
+      "https://api.transport.nsw.gov.au/v1/live/hazards/incident/all",
       expect.objectContaining({
         method: "GET",
         headers: expect.objectContaining({
           Accept: "application/json",
+          Authorization: expect.stringContaining("apikey "),
         }),
       })
     );
