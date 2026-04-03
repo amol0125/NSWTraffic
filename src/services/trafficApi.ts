@@ -1,7 +1,7 @@
 import type { Incident } from "../types/Incident";
 
 const API_URL =
-  "https://api.transport.nsw.gov.au/v1/live/hazards/incident/all";
+  "https://nswtraffic-proxy.<yourname>.workers.dev";
 
 const API_KEY = process.env.EXPO_PUBLIC_NSW_API_KEY;
 

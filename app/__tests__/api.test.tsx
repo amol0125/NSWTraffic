@@ -68,7 +68,7 @@ describe("fetchIncidents", () => {
     await fetchIncidents();
 
     expect(fetch).toHaveBeenCalledWith(
-      "https://api.transport.nsw.gov.au/v1/live/hazards/incident/all",
+      "https://nswtraffic-proxy.<yourname>.workers.dev",
       expect.objectContaining({
         method: "GET",
         headers: expect.objectContaining({
