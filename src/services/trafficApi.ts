@@ -1,26 +1,12 @@
 import type { Incident } from "../types/Incident";
 
-const API_URL =
-  "https://nswtraffic-proxy.<yourname>.workers.dev";
-
-const API_KEY = process.env.EXPO_PUBLIC_NSW_API_KEY;
+const API_URL = "https://nswtraffic-proxy.amhassani.workers.dev/";
 
 export async function fetchIncidents(): Promise<Incident[]> {
-  if (!API_KEY) {
-    console.log("NSW API error: missing EXPO_PUBLIC_NSW_API_KEY");
-    return [];
-  }
-
-  const res = await fetch(API_URL, {
-    method: "GET",
-    headers: {
-      Accept: "application/json",
-      Authorization: API_KEY, // e.g. "apikey eyJhbGciOiJIUzI1NiIs..."
-    },
-  });
+  const res = await fetch(API_URL);
 
   if (!res.ok) {
-    console.log("NSW API error:", res.status, await res.text());
+    console.log("Proxy error:", res.status, await res.text());
     return [];
   }
 

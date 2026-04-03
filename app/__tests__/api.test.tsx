@@ -59,7 +59,7 @@ describe("fetchIncidents", () => {
     expect(result).toEqual([]);
   });
 
-  it("calls the NSW API with correct URL and headers", async () => {
+  it("calls the Cloudflare Worker with correct URL", async () => {
     (fetch as jest.Mock).mockResolvedValueOnce({
       ok: true,
       json: () => Promise.resolve({ features: [] }),
@@ -68,14 +68,7 @@ describe("fetchIncidents", () => {
     await fetchIncidents();
 
     expect(fetch).toHaveBeenCalledWith(
-      "https://nswtraffic-proxy.<yourname>.workers.dev",
-      expect.objectContaining({
-        method: "GET",
-        headers: expect.objectContaining({
-          Accept: "application/json",
-          Authorization: expect.stringContaining("apikey "),
-        }),
-      })
+      "https://nswtraffic-proxy.amhassani.workers.dev/"
     );
   });
 });
