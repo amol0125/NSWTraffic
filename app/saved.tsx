@@ -29,10 +29,20 @@ export default function SavedIncidents() {
   };
 
   const handleClearAll = () => {
-    if (Platform.OS === "web") {
-        window.alert(
-          "Clear All"+
-          "Are you sure you want to remove all saved incidents?"+
+     if (Platform.OS === "web") {
+        const confirmed = window.confirm(
+          "Are you sure you want to remove all saved incidents?"
+        );
+
+        if (confirmed) {
+          clearAllIncidents().then(load);
+        }
+        return;
+      }
+
+        Alert.alert(
+          "Clear All",
+          "Are you sure you want to remove all saved incidents?",
           [
             { text: "Cancel", style: "cancel" },
             {
@@ -45,23 +55,7 @@ export default function SavedIncidents() {
             },
           ]
         );
-    } else {
-    Alert.alert(
-      "Clear All",
-      "Are you sure you want to remove all saved incidents?",
-      [
-        { text: "Cancel", style: "cancel" },
-        {
-          text: "Clear",
-          style: "destructive",
-          onPress: async () => {
-            await clearAllIncidents();
-            load();
-          },
-        },
-      ]
-    );
-  }};
+      };
 
   return (
     <SafeAreaView style={styles.container} edges={['top', 'left', 'right']}>
