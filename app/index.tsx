@@ -92,7 +92,7 @@ export default function Home() {
 
   useEffect(() => {
     loadData();
-    console.log("API KEY:", process.env.EXPO_PUBLIC_NSW_API_KEY);
+    //console.log("API KEY:", process.env.EXPO_PUBLIC_NSW_API_KEY);
 
   }, []);
 
